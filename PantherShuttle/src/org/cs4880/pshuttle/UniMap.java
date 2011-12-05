@@ -105,19 +105,6 @@ public class UniMap extends MapActivity implements LocationListener {
 		location = locationManager.getLastKnownLocation(bestProvider);
 		
 		updateLocation(location);
-		
-		
-		lat = (getLatitude()*1E6);		//get my latitude
-		lng = (getLongitude()*1E6);		//get my longitude
-		GeoPoint point = new GeoPoint((int) lat, (int) lng);			//create a geo point at my location
-		OverlayItem overlayitem = new OverlayItem(point, "You Are Here", "");	//display marker at my location
-        drawable.setBounds(-drawable.getIntrinsicWidth() / 2, -drawable.getIntrinsicHeight(), drawable.getIntrinsicWidth() / 2, 0);
-	    overlayitem.setMarker(drawable);			//set the marker at my location
-        itemizedoverlay.addOverlay(overlayitem);	//add the marker to the overlay
-        mapController.animateTo(point);				//display the map at my location
-        
-        //add the overlay to the map
-        mapOverlays.add(itemizedoverlay);
 	}
 	
 	private void getBusStops() {
@@ -363,6 +350,18 @@ public class UniMap extends MapActivity implements LocationListener {
 				lng = 0;
 				Toast.makeText(getApplicationContext(), "Error updating location", Toast.LENGTH_LONG).show();
 			}
+			
+			lat = (getLatitude()*1E6);		//get my latitude
+			lng = (getLongitude()*1E6);		//get my longitude
+			GeoPoint point = new GeoPoint((int) lat, (int) lng);			//create a geo point at my location
+			OverlayItem overlayitem = new OverlayItem(point, "You Are Here", "");	//display marker at my location
+	        drawable.setBounds(-drawable.getIntrinsicWidth() / 2, -drawable.getIntrinsicHeight(), drawable.getIntrinsicWidth() / 2, 0);
+		    overlayitem.setMarker(drawable);			//set the marker at my location
+	        itemizedoverlay.addOverlay(overlayitem);	//add the marker to the overlay
+	        mapController.animateTo(point);				//display the map at my location
+	        
+	        //add the overlay to the map
+	        mapOverlays.add(itemizedoverlay);
 		}
 	
 		
