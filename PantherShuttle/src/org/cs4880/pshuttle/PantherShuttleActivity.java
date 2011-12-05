@@ -38,7 +38,7 @@ public class PantherShuttleActivity extends Activity implements OnClickListener 
     public void onClick(View v){
     	switch(v.getId()){
     	case R.id.btnMap:
-    		Intent i = new Intent(this, Map.class);
+    		Intent i = new Intent(this, UniMap.class);
     		startActivity(i);
     		break;
     	case R.id.btnSchedule:

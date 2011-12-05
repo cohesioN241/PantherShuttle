@@ -3,6 +3,7 @@ package org.cs4880.pshuttle;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -28,7 +29,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
-public class Map extends MapActivity implements LocationListener {
+public class UniMap extends MapActivity implements LocationListener {
 
 	private MapController mapController;
 	private MapView mapView;
@@ -46,14 +47,16 @@ public class Map extends MapActivity implements LocationListener {
 		super.onCreate(bundle);
 		setContentView(R.layout.maps); // bind the layout to the activity
 		
+		
 		//setup the map
 		setupMap();
 		
-		//setup bustop locations
-		setupBusStops();
-		
 		//Pull my location
 		getMyLocation();
+		
+		//setup bustop locations
+		setupBusStops();
+
 		
 		time = new BusStopTimes();
 		
@@ -84,14 +87,14 @@ public class Map extends MapActivity implements LocationListener {
 	}
 	
 	private void setupBusStops() {
-		locRoth = new BusStop(this.getString(R.string.roth), 42.50868489190292, -92.45049700140953);
-		locOhio = new BusStop(this.getString(R.string.ohio), 42.512937827497495, -92.46176898479462);
-		locSterling = new BusStop(this.getString(R.string.sterling), 42.51246727052621, -92.47239053249359);
-		locHillcrest = new BusStop(this.getString(R.string.hillcrest), 42.503411, -92.473598);
-		locCampuscts = new BusStop(this.getString(R.string.campuscts), 42.50546385690268, -92.4680507183075);
-		locHudson = new BusStop(this.getString(R.string.hudson), 42.51304953482958, -92.46543556451797);
-		locCampus = new BusStop(this.getString(R.string.campus), 42.51677135081397, -92.45980560779572);
-		locSeerley = new BusStop(this.getString(R.string.seerley), 42.51602008576133, -92.45587080717087);
+		locRoth = new BusStop(this.getString(R.string.roth), 42.50868489190292, -92.45049700140953,bestProvider);
+		locOhio = new BusStop(this.getString(R.string.ohio), 42.512937827497495, -92.46176898479462,bestProvider);
+		locSterling = new BusStop(this.getString(R.string.sterling), 42.51246727052621, -92.47239053249359,bestProvider);
+		locHillcrest = new BusStop(this.getString(R.string.hillcrest), 42.503411, -92.473598,bestProvider);
+		locCampuscts = new BusStop(this.getString(R.string.campuscts), 42.50546385690268, -92.4680507183075,bestProvider);
+		locHudson = new BusStop(this.getString(R.string.hudson), 42.51304953482958, -92.46543556451797,bestProvider);
+		locCampus = new BusStop(this.getString(R.string.campus), 42.51677135081397, -92.45980560779572,bestProvider);
+		locSeerley = new BusStop(this.getString(R.string.seerley), 42.51602008576133, -92.45587080717087,bestProvider);
 	}
 	
 	private void getMyLocation() {
