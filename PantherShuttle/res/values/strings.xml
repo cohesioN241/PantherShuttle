@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, PantherShuttleActivity!</string>
+    <string name="app_name">Panther Shuttle</string>
+    <string name="map">View Map</string>
+    <string name="times">View Next Stops</string>
+    <string name="schedule">Schedule</string>
+    <string name="refresh">Refresh Map</string>
+    <string name="arrives">Arrives in</string>
+    <string name="roth">ROTH Northeast Lot</string>
+    <string name="ohio">27th and Ohio St. (CBB)</string>
+    <string name="sterling">Sterling Apts</string>
+    <string name="hillcrest">Hillcrest Apts</string>
+    <string name="campuscts">Campus Court Apts</string>
+    <string name="hudson">27th St. and Hudson Rd</string>
+    <string name="campus">West 23rd and Campus St.</string>
+    <string name="seerley">Bus Stop by Seerley</string>
+
+</resources>
