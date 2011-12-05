@@ -1,6 +1,8 @@
 package org.cs4880.pshuttle;
 
+import android.content.Context;
 import android.location.Location;
+import android.location.LocationManager;
 
 public class BusStop {
 	
@@ -10,11 +12,12 @@ public class BusStop {
 	private double distance;
 	private Location location;
 	
-	public BusStop(String name, double latitude, double longitude)
+	public BusStop(String name, double latitude, double longitude, String provider)
 	{
 		this.name = name;
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.location = new Location(provider);
 		this.location.setLatitude(latitude);
 		this.location.setLongitude(longitude);
 	}
