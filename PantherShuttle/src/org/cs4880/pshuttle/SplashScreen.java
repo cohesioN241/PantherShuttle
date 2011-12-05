@@ -28,7 +28,7 @@ public class SplashScreen extends Activity {
                finish();
                Intent i = new Intent();
                i.setClassName("org.cs4880.pshuttle",
-                              "org.cs4880.pshuttle.PantherShuttleActivity");
+                              "org.cs4880.pshuttle.UniMap");
                startActivity(i);
             }
          }

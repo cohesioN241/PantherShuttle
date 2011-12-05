@@ -24,11 +24,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        
-        <activity android:name=".PantherShuttleActivity"
-                  android:label="@string/app_name">
-        </activity>    
+        </activity>  
             
         <activity android:name=".UniMap"
                   android:label="@string/app_name">
