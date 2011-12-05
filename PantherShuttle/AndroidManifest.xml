@@ -30,7 +30,7 @@
                   android:label="@string/app_name">
         </activity>    
             
-        <activity android:name=".Map"
+        <activity android:name=".UniMap"
                   android:label="@string/app_name">
         </activity>
         
