@@ -57,23 +57,24 @@ public class BusStopTimes {
     }
 	
     public int getTime(String busstop){
+    	int time = 0;
     	if (busstop.equals("roth")){
-    		return roth;
+    		time = roth;
     	} else if (busstop.equals("ohio")){
-    		return ohio;
+    		time = ohio;
     	} else if (busstop.equals("sterling")){
-    		return sterling;
+    		time = sterling;
     	} else if (busstop.equals("hillcrest")){
-    		return hillcrest;
+    		time = hillcrest;
     	} else if (busstop.equals("campuscts")){
-    		return campuscts;
+    		time = campuscts;
     	} else if (busstop.equals("hudson")){
-    		return hudson;
+    		time = hudson;
     	} else if (busstop.equals("campus")){
-    		return campus;
+    		time = campus;
     	} else if (busstop.equals("seerley")){
-    		return seerley;
+    		time = seerley;
     	}
-    	return 0;
+    	return time;
     }
 }

@@ -64,9 +64,8 @@ public class UniMap extends MapActivity implements LocationListener {
         //add bus stops to map
         getBusStops();
         
-        //getDistances();
-        
-        getNextStops();
+        //get the nearest bus stops
+        getNearestStops();
 	}
 
 	@Override
@@ -168,19 +167,6 @@ public class UniMap extends MapActivity implements LocationListener {
         mapOverlays.add(itemizedoverlay2);
 	}
 	
-	private void getDistances() {
-		locRoth.setDistance(location.distanceTo(locRoth.getLocation()));
-		locOhio.setDistance(location.distanceTo(locOhio.getLocation()));
-		locSterling.setDistance(location.distanceTo(locSterling.getLocation()));
-		locHillcrest.setDistance(location.distanceTo(locHillcrest.getLocation()));
-		locCampuscts.setDistance(location.distanceTo(locCampuscts.getLocation()));
-		locHudson.setDistance(location.distanceTo(locHudson.getLocation()));
-		locCampus.setDistance(location.distanceTo(locCampus.getLocation()));
-		locSeerley.setDistance(location.distanceTo(locSeerley.getLocation()));
-		
-		sortDistances();
-	}
-	
 	private void sortDistances() {
 		BusStopMap busStopMap = new BusStopMap();
 
@@ -202,7 +188,6 @@ public class UniMap extends MapActivity implements LocationListener {
         {
             Map.Entry m =(Map.Entry)i.next();
 
-            double distance = (Double)m.getKey();
             BusStop busstop = (BusStop)m.getValue();
 
             TableLayout tl = (TableLayout)findViewById(R.id.tableMain);
@@ -211,7 +196,7 @@ public class UniMap extends MapActivity implements LocationListener {
             name.setText(busstop.getName());
             TextView time = new TextView(this);
             time.setText(busstop.getTime() + " minutes");
-            time.setGravity(Gravity.CENTER_HORIZONTAL);
+            time.setGravity(Gravity.RIGHT);
             
             tl.addView(row);
             row.addView(name);
@@ -219,96 +204,17 @@ public class UniMap extends MapActivity implements LocationListener {
         }
 	}
 	
-	private void getNextStops() {
-		Calendar now = Calendar.getInstance();
-        int minute = now.get(Calendar.MINUTE);
-		String stopOne = "";
-        String stopTwo = "";
-        String stopThree = "";
-        int minOne = 0;
-        int minTwo = 0;
-        int minThree = 0;
-        
-        TextView nextOne = (TextView)findViewById(R.id.nextOne);
-        TextView nextOneTime = (TextView)findViewById(R.id.nextOneTime);
-        TextView nextTwo = (TextView)findViewById(R.id.nextTwo);
-        TextView nextTwoTime = (TextView)findViewById(R.id.nextTwoTime);
-        TextView nextThree = (TextView)findViewById(R.id.nextThree);
-        TextView nextThreeTime = (TextView)findViewById(R.id.nextThreeTime);
-        /**
-        if ((minute >= 0 && minute < 4) || (minute >= 28 && minute < 34) || (minute >= 58)) {
-        	//	ROTH Northeast Lot
-        	stopOne = locRoth.getName();
-        	minOne = time.getRoth();
-        	stopTwo = locOhio.getName();
-        	minTwo = time.getOhio();
-        	stopThree = locSterling.getName();
-        	minThree = time.getSterling();
-        } else if ((minute >= 4 && minute < 10) || (minute >= 34 && minute < 40)) {
-        	//	27th and Ohio St
-        	stopOne = locOhio.getName();
-        	minOne = time.getOhio();
-        	stopTwo = locSterling.getName();
-        	minTwo = time.getSterling();
-        	stopThree = locHillcrest.getName();
-        	minThree = time.getHillcrest();
-        } else if ((minute >= 10 && minute < 13) || (minute >= 40 && minute < 43)) {
-        	//	Sterling Apts
-        	stopOne = locSterling.getName();
-        	minOne = time.getSterling();
-        	stopTwo = locHillcrest.getName();
-        	minTwo = time.getHillcrest();
-        	stopThree = locCampuscts.getName();
-        	minThree = time.getCampuscts();
-        } else if ((minute >= 13 && minute < 19) || (minute >= 43 && minute < 49)) {
-        	// 	Hillcrest Apts
-        	stopOne = locHillcrest.getName();
-        	minOne = time.getHillcrest();
-        	stopTwo = locCampuscts.getName();
-        	minTwo = time.getCampuscts();
-        	stopThree = locHudson.getName();
-        	minThree = time.getHudson();
-        } else if ((minute >= 19 && minute < 21) || (minute >= 49 && minute < 51)) {
-        	//	Campus Court Apts
-        	stopOne = locCampuscts.getName();
-        	minOne = time.getCampuscts();
-        	stopTwo = locHudson.getName();
-        	minTwo = time.getHudson();
-        	stopThree = locCampus.getName();
-        	minThree = time.getCampus();
-        } else if ((minute >= 21 && minute < 23) || (minute >= 51 && minute < 53)) {
-        	//	27th St. and Hudson Rd
-        	stopOne = locHudson.getName();
-        	minOne = time.getHudson();
-        	stopTwo = locCampus.getName();
-        	minTwo = time.getCampus();
-        	stopThree = locSeerley.getName();
-        	minThree = time.getSeerley();
-        } else if ((minute >= 23 && minute < 26) || (minute >= 53 && minute < 56)) {
-        	//	23rd and Campus Streets
-        	stopOne = locCampus.getName();
-        	minOne = time.getCampus();
-        	stopTwo = locSeerley.getName();
-        	minTwo = time.getSeerley();
-        	stopThree = locRoth.getName();
-        	minThree = time.getRoth();
-        } else if ((minute >= 26 && minute < 28) || (minute >= 56 && minute < 58)) {
-        	//	Bus Stop by Seerley
-        	stopOne = locSeerley.getName();
-        	minOne = time.getSeerley();
-        	stopTwo = locRoth.getName();
-        	minTwo = time.getRoth();
-        	stopThree = locOhio.getName();
-        	minThree = time.getOhio();
-        }
-        
-        nextOne.setText(stopOne);
-        nextOneTime.setText(minOne + " minutes");
-        nextTwo.setText(stopTwo);
-        nextTwoTime.setText(minTwo + " minutes");
-        nextThree.setText(stopThree);
-        nextThreeTime.setText(minThree + " minutes");
-        */
+	private void getNearestStops() {
+		locRoth.setDistance(location.distanceTo(locRoth.getLocation()));
+		locOhio.setDistance(location.distanceTo(locOhio.getLocation()));
+		locSterling.setDistance(location.distanceTo(locSterling.getLocation()));
+		locHillcrest.setDistance(location.distanceTo(locHillcrest.getLocation()));
+		locCampuscts.setDistance(location.distanceTo(locCampuscts.getLocation()));
+		locHudson.setDistance(location.distanceTo(locHudson.getLocation()));
+		locCampus.setDistance(location.distanceTo(locCampus.getLocation()));
+		locSeerley.setDistance(location.distanceTo(locSeerley.getLocation()));
+		
+		sortDistances();
 	}
 		
 	

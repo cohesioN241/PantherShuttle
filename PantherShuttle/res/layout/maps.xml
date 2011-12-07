@@ -27,17 +27,15 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"   
         android:gravity="center_horizontal"
-        			android:paddingTop="10sp"
-			android:paddingBottom="10sp">
-            <View 
+        android:paddingTop="10sp"
+		android:paddingBottom="10sp">
+        <View 
             android:layout_width="300dip"
 			android:layout_height="2dip"
 			android:background="#FFFFFFFF"
 			android:gravity="center"
-			android:layout_span="2"
-
- />
-            </TableRow>
+			android:layout_span="2" />
+    </TableRow>
     <TableRow  
         android:id="@+id/rowTitle"  
         android:layout_height="wrap_content"  
@@ -50,17 +48,17 @@
             android:textStyle="bold"  
             android:typeface="serif"  
             android:textSize="18dp"  
-            android:text="Next Panther Shuttle Stops\n"  
+            android:text="Panther Shuttle Stops"  
             android:gravity="center"  
-            android:layout_span="3" />  
+            android:layout_span="2" />  
     </TableRow>  
     <TableRow  
         android:id="@+id/rowHeaders"  
         android:layout_height="wrap_content"  
         android:layout_width="match_parent">  
         <TextView  
-            android:id="@+id/nextstop"  
-            android:text="Next Stop"
+            android:id="@+id/neareststop"  
+            android:text="Nearest Stop"
             android:textStyle="bold"
             android:typeface="serif" />  
         <TextView  
@@ -68,55 +66,8 @@
             android:text="Arrives In..."  
             android:textStyle="bold"  
             android:typeface="serif"
-            android:layout_span="2" />  
+            android:gravity="right" />  
     </TableRow>  
-    <TableRow  
-        android:layout_height="wrap_content"  
-        android:id="@+id/row4"  
-        android:layout_width="match_parent">  
-        <TextView  
-            android:text=""  
-            android:id="@+id/nextOne"  
-            android:textStyle="bold" />  
-        <TextView  
-            android:text="" />  
-        <TextView  
-            android:text=""  
-            android:id="@+id/nextOneTime"  
-            android:gravity="center_horizontal" />
-    </TableRow>  
-    <TableRow  
-        android:layout_height="wrap_content"  
-        android:id="@+id/row5"  
-        android:layout_width="match_parent">  
-        <TextView  
-            android:text=""  
-            android:id="@+id/nextTwo"  
-            android:textStyle="bold" />  
-        <TextView  
-            android:text="" />  
-        <TextView  
-            android:text=""  
-            android:id="@+id/nextTwoTime"  
-            android:gravity="center_horizontal" />
-    </TableRow>  
-    <TableRow  
-        android:layout_height="wrap_content"  
-        android:id="@+id/row6"  
-        android:layout_width="match_parent">  
-        <TextView  
-            android:text=""  
-            android:id="@+id/nextThree"  
-            android:textStyle="bold" />  
-        <TextView  
-            android:text="" />  
-        <TextView  
-            android:text=""  
-            android:id="@+id/nextThreeTime"  
-            android:gravity="center_horizontal" />
-    </TableRow>  
-    
-
 </TableLayout>
         
 
