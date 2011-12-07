@@ -64,7 +64,7 @@ public class UniMap extends MapActivity implements LocationListener {
 		
 		//check if the bus is currently running
 		Calendar now = Calendar.getInstance();
-        if ((now.get(Calendar.HOUR_OF_DAY) >= 7) && (now.get(Calendar.HOUR_OF_DAY) <= 17)) {
+        if ((now.get(Calendar.HOUR_OF_DAY) >= 7) && (now.get(Calendar.HOUR_OF_DAY) < 17)) {
         	isRunning = true;
         }
         
