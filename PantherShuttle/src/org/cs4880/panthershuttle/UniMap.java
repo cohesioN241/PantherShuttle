@@ -1,17 +1,14 @@
 package org.cs4880.panthershuttle;
 
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
-import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -37,8 +34,8 @@ public class UniMap extends MapActivity implements LocationListener {
 	private MapController mapController;
 	private MapView mapView;
 	private List<Overlay> mapOverlays;
-	private Drawable drawable, drawable2;
-	private MyItemizedOverlay itemizedoverlay, itemizedoverlay2;
+	private Drawable drawable;
+	private MyItemizedOverlay itemizedoverlay;
 	private Location location = null;
 	private GeoPoint myLocation = null;
 	private OverlayItem overlayitem = null;
@@ -47,6 +44,7 @@ public class UniMap extends MapActivity implements LocationListener {
 	private String gpsProvider = "";
 	private BusStopTimes time;
 	private BusStop locRoth, locOhio, locSterling, locHillcrest, locCampuscts, locHudson, locCampus, locSeerley;
+	private BusStop[] busstops;
 
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
@@ -73,6 +71,7 @@ public class UniMap extends MapActivity implements LocationListener {
 		return false;
 	}
 	
+	/** This method will setup our Google Map */
 	private void setupMap() {
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setBuiltInZoomControls(true);
@@ -86,87 +85,92 @@ public class UniMap extends MapActivity implements LocationListener {
 		mapController.setZoom(16); // Zoom 1 is world view
 	}
 	
+	/** This method sets up the bus stops */
 	private void setupBusStops() {
 		time = new BusStopTimes();
 		
+		busstops = new BusStop[8];
 		locRoth = new BusStop(this.getString(R.string.roth), time.getTime("roth"), 42.50868489190292, -92.45049700140953, gpsProvider);
+		busstops[0] = locRoth;
 		locOhio = new BusStop(this.getString(R.string.ohio), time.getTime("ohio"), 42.512937827497495, -92.46176898479462, gpsProvider);
+		busstops[1] = locOhio;
 		locSterling = new BusStop(this.getString(R.string.sterling), time.getTime("sterling"), 42.51246727052621, -92.47239053249359, gpsProvider);
+		busstops[2] = locSterling;
 		locHillcrest = new BusStop(this.getString(R.string.hillcrest), time.getTime("hillcrest"), 42.503411, -92.473598, gpsProvider);
+		busstops[3] = locHillcrest;
 		locCampuscts = new BusStop(this.getString(R.string.campuscts), time.getTime("campuscts"), 42.50546385690268, -92.4680507183075, gpsProvider);
+		busstops[4] = locCampuscts;
 		locHudson = new BusStop(this.getString(R.string.hudson), time.getTime("hudson"), 42.51304953482958, -92.46543556451797, gpsProvider);
+		busstops[5] = locHudson;
 		locCampus = new BusStop(this.getString(R.string.campus), time.getTime("campus"), 42.51677135081397, -92.45980560779572, gpsProvider);
+		busstops[6] = locCampus;
 		locSeerley = new BusStop(this.getString(R.string.seerley), time.getTime("seerley"), 42.51602008576133, -92.45587080717087, gpsProvider);
+		busstops[7] = locSeerley;
 	}
 	
+	/** This method will get my current location */
 	private void getMyLocation() {
+		//get the location based service
 		locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
+		//use gps as our primary location provider
 		gpsProvider = locationManager.getProvider("gps").getName();
 		
+		//request location updates every 15 seconds and distance changed by 20 meters
 		locationManager.requestLocationUpdates(gpsProvider, 15000, 20, this);
 		
+		//get our last known location
 		location = locationManager.getLastKnownLocation(gpsProvider);
 		
+		//update our location
 		updateLocation(location);
 	}
 	
+	/** This method displays the bus stops on the map */
 	private void getBusStops() {
-		drawable2 = this.getResources().getDrawable(R.drawable.pin2);	//marker for bus stops
-		itemizedoverlay2 = new MyItemizedOverlay(drawable2, this);
-		
-        //ROTH Northeast Lot
-		GeoPoint gpRoth = new GeoPoint((int)(locRoth.getLatitude()*1E6), (int)(locRoth.getLongitude()*1E6));
-		OverlayItem overlayRoth = new OverlayItem(gpRoth, locRoth.getName(), "Arrives in " + locRoth.getTime() + " minutes");
-		overlayRoth.setMarker(drawable2);
-        itemizedoverlay2.addOverlay(overlayRoth);
-		
-        //27th and Ohio St. (Curris Business Building)
-        GeoPoint gpOhio = new GeoPoint((int)(locOhio.getLatitude()*1E6), (int)(locOhio.getLongitude()*1E6));
-		OverlayItem overlayOhio = new OverlayItem(gpOhio, locOhio.getName(), "Arrives in " + locOhio.getTime() + " minutes");
-		overlayOhio.setMarker(drawable2);
-        itemizedoverlay2.addOverlay(overlayOhio);
-        
-        //Sterling Apts
-        GeoPoint gpSterling = new GeoPoint((int)(locSterling.getLatitude()*1E6), (int)(locSterling.getLongitude()*1E6));
-		OverlayItem overlayUVMSter = new OverlayItem(gpSterling, locSterling.getName(), "Arrives in " + locSterling.getTime() + " minutes");
-        overlayUVMSter.setMarker(drawable2);
-        itemizedoverlay2.addOverlay(overlayUVMSter);
-        
-        //Hillcrest Apts
-        GeoPoint gpHillcrest = new GeoPoint((int)(locHillcrest.getLatitude()*1E6), (int)(locHillcrest.getLongitude()*1E6));
-		OverlayItem overlayHillcrest = new OverlayItem(gpHillcrest, locHillcrest.getName(), "Arrives in " + locHillcrest.getTime() + " minutes");
-        overlayHillcrest.setMarker(drawable2);
-        itemizedoverlay2.addOverlay(overlayHillcrest);
-        
-        //Campus Court
-        GeoPoint gpCampCts = new GeoPoint((int)(locCampuscts.getLatitude()*1E6), (int)(locCampuscts.getLongitude()*1E6));
-		OverlayItem overlayCampCts = new OverlayItem(gpCampCts, locCampuscts.getName(), "Arrives in " + locCampuscts.getTime() + " minutes");
-        overlayCampCts.setMarker(drawable2);
-        itemizedoverlay2.addOverlay(overlayCampCts);
-        
-        //27th St. and Hudson Rd
-		GeoPoint gpHudson = new GeoPoint((int)(locHudson.getLatitude()*1E6), (int)(locHudson.getLongitude()*1E6));
-		OverlayItem overlayHudson = new OverlayItem(gpHudson, locHudson.getName(), "Arrives in " + locHudson.getTime() + " minutes");
-        overlayHudson.setMarker(drawable2);
-        itemizedoverlay2.addOverlay(overlayHudson);
-        
-        //23rd and Campus Streets
-        GeoPoint gpW23C = new GeoPoint((int)(locCampus.getLatitude()*1E6), (int)(locCampus.getLongitude()*1E6));
-		OverlayItem overlayW23C = new OverlayItem(gpW23C, locCampus.getName(), "Arrives in " + locCampus.getTime() + " minutes");
-        overlayW23C.setMarker(drawable2);
-        itemizedoverlay.addOverlay(overlayW23C);
-        
-        //Seerley
-        GeoPoint gpSeerly = new GeoPoint((int)(locSeerley.getLatitude()*1E6), (int)(locSeerley.getLongitude()*1E6));
-		OverlayItem overlaySeerly = new OverlayItem(gpSeerly, locSeerley.getName(), "Arrives in " + locSeerley.getTime() + " minutes");
-        overlaySeerly.setMarker(drawable2);
-        itemizedoverlay.addOverlay(overlaySeerly);
-        
-        //add overlays to map
-        mapOverlays.add(itemizedoverlay2);
+		for (int i=0; i<busstops.length; i++) {
+			Drawable locStop = null;
+			MyItemizedOverlay overlayStop = null;
+			GeoPoint gp = new GeoPoint((int)(busstops[i].getLatitude()*1E6), (int)(busstops[i].getLongitude()*1E6));
+			OverlayItem overlayitem = new OverlayItem(gp, busstops[i].getName(), "Arrives in " + busstops[i].getTime() + " minutes");
+			if (busstops[i].getTime() <= 10) {	//bus arrives in less than 10 minutes
+				locStop = this.getResources().getDrawable(R.drawable.pin2);	//red marker
+				overlayStop = new MyItemizedOverlay(locStop, this);
+			} else if (busstops[i].getTime() <= 20) {	//bus arrives in more than 10 minutes and less than 20 minutes
+				locStop = this.getResources().getDrawable(R.drawable.pin3);	//orange marker
+				overlayStop = new MyItemizedOverlay(locStop, this);
+			} else if (busstops[i].getTime() <= 30) {	//bus arrives in more than 20 minutes and less than 30 minutes
+				locStop = this.getResources().getDrawable(R.drawable.pin4);	//yellow marker
+				overlayStop = new MyItemizedOverlay(locStop, this);
+			}
+			
+			//set the overlayitem marker
+			overlayitem.setMarker(locStop);
+			
+			//add bus stop to overlay
+			overlayStop.addOverlay(overlayitem);
+
+	        //add overlays to map
+	        mapOverlays.add(overlayStop);
+		}
 	}
 	
+	/** This method sets the distance to each bus stop */
+	private void getNearestStops() {
+		locRoth.setDistance(location.distanceTo(locRoth.getLocation()));
+		locOhio.setDistance(location.distanceTo(locOhio.getLocation()));
+		locSterling.setDistance(location.distanceTo(locSterling.getLocation()));
+		locHillcrest.setDistance(location.distanceTo(locHillcrest.getLocation()));
+		locCampuscts.setDistance(location.distanceTo(locCampuscts.getLocation()));
+		locHudson.setDistance(location.distanceTo(locHudson.getLocation()));
+		locCampus.setDistance(location.distanceTo(locCampus.getLocation()));
+		locSeerley.setDistance(location.distanceTo(locSeerley.getLocation()));
+		
+		//sort our bus stops according to distance
+		sortDistances();
+	}
+	
+	/** This method sorts the bus stops according to shortest distance first */
 	private void sortDistances() {
 		BusStopMap busStopMap = new BusStopMap();
 
@@ -193,11 +197,24 @@ public class UniMap extends MapActivity implements LocationListener {
 
             TableLayout tl = (TableLayout)findViewById(R.id.tableMain);
             TableRow row = new TableRow(this);
+            
             TextView name = new TextView(this);
             name.setText(rank + ". " + busstop.getName());
+            
             TextView time = new TextView(this);
             time.setText(busstop.getTime() + " minutes");
             time.setGravity(Gravity.RIGHT);
+            
+            if (busstop.getTime() <= 10){
+            	name.setTextColor(Color.RED);
+            	time.setTextColor(Color.RED);
+            } else if (busstop.getTime() <= 20) {
+            	name.setTextColor(Color.argb(255,255,157,19));
+            	time.setTextColor(Color.argb(255,255,157,19));
+            } else if (busstop.getTime() <= 30) {
+            	name.setTextColor(Color.YELLOW);
+            	time.setTextColor(Color.YELLOW);
+            }
             
             tl.addView(row);
             row.addView(name);
@@ -205,19 +222,6 @@ public class UniMap extends MapActivity implements LocationListener {
             
             rank++;
         }
-	}
-	
-	private void getNearestStops() {
-		locRoth.setDistance(location.distanceTo(locRoth.getLocation()));
-		locOhio.setDistance(location.distanceTo(locOhio.getLocation()));
-		locSterling.setDistance(location.distanceTo(locSterling.getLocation()));
-		locHillcrest.setDistance(location.distanceTo(locHillcrest.getLocation()));
-		locCampuscts.setDistance(location.distanceTo(locCampuscts.getLocation()));
-		locHudson.setDistance(location.distanceTo(locHudson.getLocation()));
-		locCampus.setDistance(location.distanceTo(locCampus.getLocation()));
-		locSeerley.setDistance(location.distanceTo(locSeerley.getLocation()));
-		
-		sortDistances();
 	}
 		
 	
@@ -236,6 +240,7 @@ public class UniMap extends MapActivity implements LocationListener {
 			locationManager.removeUpdates(this);
 		}
 		
+		/** My location has changed */
 		@Override
 		public void onLocationChanged(Location location) {
 			updateLocation(location);
@@ -256,6 +261,7 @@ public class UniMap extends MapActivity implements LocationListener {
 			
 		}
 		
+		/** This method is called when our location has changed */
 		private void updateLocation(Location loc){
 			if (loc != null){
 				lat = loc.getLatitude();
@@ -286,30 +292,32 @@ public class UniMap extends MapActivity implements LocationListener {
 	
 		
 	/** OptionsMenu */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu){
-		MenuInflater inflater=getMenuInflater();
-		inflater.inflate(R.menu.menu, menu);
-		return true;
-	}
-    
-    @Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()){
-		case R.id.menuRefresh:
-			Intent i = getIntent();
-		    overridePendingTransition(0, 0);
-		    i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-		    finish();
-
-		    overridePendingTransition(0, 0);
-		    startActivity(i);
-    		return true;
-		case R.id.menuSchedule:
-    		Intent j = new Intent(this, Schedule.class);
-    		startActivity(j);
-    		return true;
+		/** This method creates the options menu */
+		@Override
+		public boolean onCreateOptionsMenu(Menu menu){
+			MenuInflater inflater=getMenuInflater();
+			inflater.inflate(R.menu.menu, menu);
+			return true;
 		}
-		return false;
-	}
+	    
+		/** This method determines which options menu item was selected */
+	    @Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()){
+			case R.id.menuRefresh:
+				Intent i = getIntent();
+			    overridePendingTransition(0, 0);
+			    i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+			    finish();
+	
+			    overridePendingTransition(0, 0);
+			    startActivity(i);
+	    		return true;
+			case R.id.menuSchedule:
+	    		Intent j = new Intent(this, Schedule.class);
+	    		startActivity(j);
+	    		return true;
+			}
+			return false;
+		}
 }
