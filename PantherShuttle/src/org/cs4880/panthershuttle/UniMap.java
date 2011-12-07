@@ -1,11 +1,13 @@
 package org.cs4880.panthershuttle;
 
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -45,6 +47,7 @@ public class UniMap extends MapActivity implements LocationListener {
 	private BusStopTimes time;
 	private BusStop locRoth, locOhio, locSterling, locHillcrest, locCampuscts, locHudson, locCampus, locSeerley;
 	private BusStop[] busstops;
+	private boolean isRunning = false;
 
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
@@ -59,11 +62,21 @@ public class UniMap extends MapActivity implements LocationListener {
 		//setup bustop locations
 		setupBusStops();
 		
-        //add bus stops to map
-        getBusStops();
+		//check if the bus is currently running
+		Calendar now = Calendar.getInstance();
+        if ((now.get(Calendar.HOUR_OF_DAY) >= 7) && (now.get(Calendar.HOUR_OF_DAY) <= 17)) {
+        	isRunning = true;
+        }
         
-        //get the nearest bus stops
-        getNearestStops();
+        //add bus stops to map
+        getBusStops(isRunning);
+        
+        if (isRunning) {	//is the bus running?
+	        //get the nearest bus stops
+	        getNearestStops();
+        } else {	//notify user that bus is not currently running
+        	notifyOffline();
+        }
 	}
 
 	@Override
@@ -127,13 +140,17 @@ public class UniMap extends MapActivity implements LocationListener {
 	}
 	
 	/** This method displays the bus stops on the map */
-	private void getBusStops() {
+	private void getBusStops(Boolean isRunning) {
 		for (int i=0; i<busstops.length; i++) {
 			Drawable locStop = null;
 			MyItemizedOverlay overlayStop = null;
+			String bustime = "";
+			if (isRunning) {
+				bustime = "Arrives in " + busstops[i].getTime() + " minutes";
+			}
 			GeoPoint gp = new GeoPoint((int)(busstops[i].getLatitude()*1E6), (int)(busstops[i].getLongitude()*1E6));
-			OverlayItem overlayitem = new OverlayItem(gp, busstops[i].getName(), "Arrives in " + busstops[i].getTime() + " minutes");
-			if (busstops[i].getTime() <= 10) {	//bus arrives in less than 10 minutes
+			OverlayItem overlayitem = new OverlayItem(gp, busstops[i].getName(), bustime);
+			if ((!isRunning) || (busstops[i].getTime() <= 10)) {	//bus arrives in less than 10 minutes
 				locStop = this.getResources().getDrawable(R.drawable.pin2);	//red marker
 				overlayStop = new MyItemizedOverlay(locStop, this);
 			} else if (busstops[i].getTime() <= 20) {	//bus arrives in more than 10 minutes and less than 20 minutes
@@ -222,6 +239,29 @@ public class UniMap extends MapActivity implements LocationListener {
             
             rank++;
         }
+	}
+	
+	private void notifyOffline(){
+		// prepare the alert box
+        AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
+
+        // set the title
+        alertbox.setTitle("Notice");
+        
+        // set the message to display
+        alertbox.setMessage("The Panther Shuttle runs between the hours of 7 AM and 5 PM. Bus arrival times will not be displayed, but you still may view the bus stop locations and the Panther Shuttle schedule.");
+
+        // add a neutral button to the alert box and assign a click listener
+        alertbox.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+
+            // click listener on the alert box
+            public void onClick(DialogInterface arg0, int arg1) {
+                // do nothing
+            }
+        });
+
+        // show it
+        alertbox.show();
 	}
 		
 	
