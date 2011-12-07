@@ -38,6 +38,11 @@ public class MyItemizedOverlay extends ItemizedOverlay {
 	    populate();
 	}
 	
+	public void removeOverlay(OverlayItem overlay) {
+        mOverlays.remove(overlay);
+        populate();
+    }
+	
 	@Override
 	protected boolean onTap(int index) {
 	  OverlayItem item = mOverlays.get(index);

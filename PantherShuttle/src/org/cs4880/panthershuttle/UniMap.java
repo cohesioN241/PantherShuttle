@@ -100,8 +100,8 @@ public class UniMap extends MapActivity implements LocationListener {
 	private void getMyLocation() {
 		locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 		
-		// Get the best provider
-		Criteria criteria = new Criteria();
+		locationManager.requestLocationUpdates(bestProvider, 15000, 20, this);
+
 		bestProvider = locationManager.getProvider("gps").getName();
 		
 		location = locationManager.getLastKnownLocation(bestProvider);
@@ -303,7 +303,7 @@ public class UniMap extends MapActivity implements LocationListener {
 		@Override
 		protected void onResume() {
 			super.onResume();
-			locationManager.requestLocationUpdates(bestProvider, 0, 0, this);
+			locationManager.requestLocationUpdates(bestProvider, 15000, 20, this);
 		}
 
 		/** Stop the updates when Activity is paused */
@@ -345,6 +345,11 @@ public class UniMap extends MapActivity implements LocationListener {
 				Toast.makeText(getApplicationContext(), "Error updating location", Toast.LENGTH_LONG).show();
 			}
 			
+			if (myLocation != null) {
+				myLocation = null;
+				itemizedoverlay.removeOverlay(overlayitem);
+				overlayitem = null;
+			}
 			myLocation = new GeoPoint((int) (lat*1E6), (int) (lng*1E6));			//create a geo point at my location
 			overlayitem = new OverlayItem(myLocation, "You Are Here", "");	//display marker at my location
 	        drawable.setBounds(-drawable.getIntrinsicWidth() / 2, -drawable.getIntrinsicHeight(), drawable.getIntrinsicWidth() / 2, 0);
