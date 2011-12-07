@@ -41,7 +41,7 @@ public class UniMap extends MapActivity implements LocationListener {
 	private OverlayItem overlayitem = null;
 	private double lat, lng = 0;
 	private LocationManager locationManager;
-	private String bestProvider = "";
+	private String gpsProvider = "";
 	private BusStopTimes time;
 	private BusStop locRoth, locOhio, locSterling, locHillcrest, locCampuscts, locHudson, locCampus, locSeerley;
 
@@ -87,24 +87,24 @@ public class UniMap extends MapActivity implements LocationListener {
 	}
 	
 	private void setupBusStops() {
-		locRoth = new BusStop(this.getString(R.string.roth), 42.50868489190292, -92.45049700140953, bestProvider);
-		locOhio = new BusStop(this.getString(R.string.ohio), 42.512937827497495, -92.46176898479462, bestProvider);
-		locSterling = new BusStop(this.getString(R.string.sterling), 42.51246727052621, -92.47239053249359, bestProvider);
-		locHillcrest = new BusStop(this.getString(R.string.hillcrest), 42.503411, -92.473598, bestProvider);
-		locCampuscts = new BusStop(this.getString(R.string.campuscts), 42.50546385690268, -92.4680507183075, bestProvider);
-		locHudson = new BusStop(this.getString(R.string.hudson), 42.51304953482958, -92.46543556451797, bestProvider);
-		locCampus = new BusStop(this.getString(R.string.campus), 42.51677135081397, -92.45980560779572, bestProvider);
-		locSeerley = new BusStop(this.getString(R.string.seerley), 42.51602008576133, -92.45587080717087, bestProvider);
+		locRoth = new BusStop(this.getString(R.string.roth), 42.50868489190292, -92.45049700140953, gpsProvider);
+		locOhio = new BusStop(this.getString(R.string.ohio), 42.512937827497495, -92.46176898479462, gpsProvider);
+		locSterling = new BusStop(this.getString(R.string.sterling), 42.51246727052621, -92.47239053249359, gpsProvider);
+		locHillcrest = new BusStop(this.getString(R.string.hillcrest), 42.503411, -92.473598, gpsProvider);
+		locCampuscts = new BusStop(this.getString(R.string.campuscts), 42.50546385690268, -92.4680507183075, gpsProvider);
+		locHudson = new BusStop(this.getString(R.string.hudson), 42.51304953482958, -92.46543556451797, gpsProvider);
+		locCampus = new BusStop(this.getString(R.string.campus), 42.51677135081397, -92.45980560779572, gpsProvider);
+		locSeerley = new BusStop(this.getString(R.string.seerley), 42.51602008576133, -92.45587080717087, gpsProvider);
 	}
 	
 	private void getMyLocation() {
 		locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-		
-		locationManager.requestLocationUpdates(bestProvider, 15000, 20, this);
 
-		bestProvider = locationManager.getProvider("gps").getName();
+		gpsProvider = locationManager.getProvider("gps").getName();
 		
-		location = locationManager.getLastKnownLocation(bestProvider);
+		locationManager.requestLocationUpdates(gpsProvider, 15000, 20, this);
+		
+		location = locationManager.getLastKnownLocation(gpsProvider);
 		
 		updateLocation(location);
 	}
@@ -303,7 +303,7 @@ public class UniMap extends MapActivity implements LocationListener {
 		@Override
 		protected void onResume() {
 			super.onResume();
-			locationManager.requestLocationUpdates(bestProvider, 15000, 20, this);
+			locationManager.requestLocationUpdates(gpsProvider, 15000, 20, this);
 		}
 
 		/** Stop the updates when Activity is paused */
