@@ -2,16 +2,12 @@ package org.cs4880.panthershuttle;
 
 import java.util.Calendar;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.widget.TextView;
-
-public class BusStopTimes extends Activity {
+public class BusStopTimes {
 
 	private int roth, ohio, sterling, hillcrest, campuscts, hudson, campus, seerley;
 	
 	public BusStopTimes() {
-    	Calendar now = Calendar.getInstance();
+		Calendar now = Calendar.getInstance();
         int minute = now.get(Calendar.MINUTE);
         
     	if (minute <= 28) {
@@ -59,36 +55,25 @@ public class BusStopTimes extends Activity {
         	seerley += 30;
         }
     }
-    
-    public int getRoth() {
-    	return roth;
-    }
-    
-    public int getOhio() {
-    	return ohio;
-    }
-    
-    public int getSterling() {
-    	return sterling;
-    }
-    
-    public int getHillcrest() {
-    	return hillcrest;
-    }
-    
-    public int getCampuscts() {
-    	return campuscts;
-    }
-    
-    public int getHudson() {
-    	return hudson;
-    }
-    
-    public int getCampus() {
-    	return campus;
-    }
-    
-    public int getSeerley() {
-    	return seerley;
+	
+    public int getTime(String busstop){
+    	if (busstop.equals("roth")){
+    		return roth;
+    	} else if (busstop.equals("ohio")){
+    		return ohio;
+    	} else if (busstop.equals("sterling")){
+    		return sterling;
+    	} else if (busstop.equals("hillcrest")){
+    		return hillcrest;
+    	} else if (busstop.equals("campuscts")){
+    		return campuscts;
+    	} else if (busstop.equals("hudson")){
+    		return hudson;
+    	} else if (busstop.equals("campus")){
+    		return campus;
+    	} else if (busstop.equals("seerley")){
+    		return seerley;
+    	}
+    	return 0;
     }
 }

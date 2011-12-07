@@ -16,9 +16,12 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,8 +61,6 @@ public class UniMap extends MapActivity implements LocationListener {
 		//setup bustop locations
 		setupBusStops();
 		
-		time = new BusStopTimes();
-		
         //add bus stops to map
         getBusStops();
         
@@ -87,14 +88,16 @@ public class UniMap extends MapActivity implements LocationListener {
 	}
 	
 	private void setupBusStops() {
-		locRoth = new BusStop(this.getString(R.string.roth), 42.50868489190292, -92.45049700140953, gpsProvider);
-		locOhio = new BusStop(this.getString(R.string.ohio), 42.512937827497495, -92.46176898479462, gpsProvider);
-		locSterling = new BusStop(this.getString(R.string.sterling), 42.51246727052621, -92.47239053249359, gpsProvider);
-		locHillcrest = new BusStop(this.getString(R.string.hillcrest), 42.503411, -92.473598, gpsProvider);
-		locCampuscts = new BusStop(this.getString(R.string.campuscts), 42.50546385690268, -92.4680507183075, gpsProvider);
-		locHudson = new BusStop(this.getString(R.string.hudson), 42.51304953482958, -92.46543556451797, gpsProvider);
-		locCampus = new BusStop(this.getString(R.string.campus), 42.51677135081397, -92.45980560779572, gpsProvider);
-		locSeerley = new BusStop(this.getString(R.string.seerley), 42.51602008576133, -92.45587080717087, gpsProvider);
+		time = new BusStopTimes();
+		
+		locRoth = new BusStop(this.getString(R.string.roth), time.getTime("roth"), 42.50868489190292, -92.45049700140953, gpsProvider);
+		locOhio = new BusStop(this.getString(R.string.ohio), time.getTime("ohio"), 42.512937827497495, -92.46176898479462, gpsProvider);
+		locSterling = new BusStop(this.getString(R.string.sterling), time.getTime("sterling"), 42.51246727052621, -92.47239053249359, gpsProvider);
+		locHillcrest = new BusStop(this.getString(R.string.hillcrest), time.getTime("hillcrest"), 42.503411, -92.473598, gpsProvider);
+		locCampuscts = new BusStop(this.getString(R.string.campuscts), time.getTime("campuscts"), 42.50546385690268, -92.4680507183075, gpsProvider);
+		locHudson = new BusStop(this.getString(R.string.hudson), time.getTime("hudson"), 42.51304953482958, -92.46543556451797, gpsProvider);
+		locCampus = new BusStop(this.getString(R.string.campus), time.getTime("campus"), 42.51677135081397, -92.45980560779572, gpsProvider);
+		locSeerley = new BusStop(this.getString(R.string.seerley), time.getTime("seerley"), 42.51602008576133, -92.45587080717087, gpsProvider);
 	}
 	
 	private void getMyLocation() {
@@ -115,49 +118,49 @@ public class UniMap extends MapActivity implements LocationListener {
 		
         //ROTH Northeast Lot
 		GeoPoint gpRoth = new GeoPoint((int)(locRoth.getLatitude()*1E6), (int)(locRoth.getLongitude()*1E6));
-		OverlayItem overlayRoth = new OverlayItem(gpRoth, locRoth.getName(), this.getString(R.string.arrives) + time.getRoth() + " minutes");
+		OverlayItem overlayRoth = new OverlayItem(gpRoth, locRoth.getName(), "Arrives in " + locRoth.getTime() + " minutes");
 		overlayRoth.setMarker(drawable2);
         itemizedoverlay2.addOverlay(overlayRoth);
 		
         //27th and Ohio St. (Curris Business Building)
         GeoPoint gpOhio = new GeoPoint((int)(locOhio.getLatitude()*1E6), (int)(locOhio.getLongitude()*1E6));
-		OverlayItem overlayOhio = new OverlayItem(gpOhio, locOhio.getName(), this.getString(R.string.arrives) + time.getOhio() + " minutes");
+		OverlayItem overlayOhio = new OverlayItem(gpOhio, locOhio.getName(), "Arrives in " + locOhio.getTime() + " minutes");
 		overlayOhio.setMarker(drawable2);
         itemizedoverlay2.addOverlay(overlayOhio);
         
         //Sterling Apts
         GeoPoint gpSterling = new GeoPoint((int)(locSterling.getLatitude()*1E6), (int)(locSterling.getLongitude()*1E6));
-		OverlayItem overlayUVMSter = new OverlayItem(gpSterling, locSterling.getName(), this.getString(R.string.arrives) + time.getSterling() + " minutes");
+		OverlayItem overlayUVMSter = new OverlayItem(gpSterling, locSterling.getName(), "Arrives in " + locSterling.getTime() + " minutes");
         overlayUVMSter.setMarker(drawable2);
         itemizedoverlay2.addOverlay(overlayUVMSter);
         
         //Hillcrest Apts
         GeoPoint gpHillcrest = new GeoPoint((int)(locHillcrest.getLatitude()*1E6), (int)(locHillcrest.getLongitude()*1E6));
-		OverlayItem overlayHillcrest = new OverlayItem(gpHillcrest, locHillcrest.getName(), this.getString(R.string.arrives) + time.getHillcrest() + " minutes");
+		OverlayItem overlayHillcrest = new OverlayItem(gpHillcrest, locHillcrest.getName(), "Arrives in " + locHillcrest.getTime() + " minutes");
         overlayHillcrest.setMarker(drawable2);
         itemizedoverlay2.addOverlay(overlayHillcrest);
         
         //Campus Court
         GeoPoint gpCampCts = new GeoPoint((int)(locCampuscts.getLatitude()*1E6), (int)(locCampuscts.getLongitude()*1E6));
-		OverlayItem overlayCampCts = new OverlayItem(gpCampCts, locCampuscts.getName(), this.getString(R.string.arrives) + time.getCampuscts() + " minutes");
+		OverlayItem overlayCampCts = new OverlayItem(gpCampCts, locCampuscts.getName(), "Arrives in " + locCampuscts.getTime() + " minutes");
         overlayCampCts.setMarker(drawable2);
         itemizedoverlay2.addOverlay(overlayCampCts);
         
         //27th St. and Hudson Rd
 		GeoPoint gpHudson = new GeoPoint((int)(locHudson.getLatitude()*1E6), (int)(locHudson.getLongitude()*1E6));
-		OverlayItem overlayHudson = new OverlayItem(gpHudson, locHudson.getName(), this.getString(R.string.arrives) + time.getHudson() + " minutes");
+		OverlayItem overlayHudson = new OverlayItem(gpHudson, locHudson.getName(), "Arrives in " + locHudson.getTime() + " minutes");
         overlayHudson.setMarker(drawable2);
         itemizedoverlay2.addOverlay(overlayHudson);
         
         //23rd and Campus Streets
         GeoPoint gpW23C = new GeoPoint((int)(locCampus.getLatitude()*1E6), (int)(locCampus.getLongitude()*1E6));
-		OverlayItem overlayW23C = new OverlayItem(gpW23C, locCampus.getName(), this.getString(R.string.arrives) + time.getCampus() + " minutes");
+		OverlayItem overlayW23C = new OverlayItem(gpW23C, locCampus.getName(), "Arrives in " + locCampus.getTime() + " minutes");
         overlayW23C.setMarker(drawable2);
         itemizedoverlay.addOverlay(overlayW23C);
         
         //Seerley
         GeoPoint gpSeerly = new GeoPoint((int)(locSeerley.getLatitude()*1E6), (int)(locSeerley.getLongitude()*1E6));
-		OverlayItem overlaySeerly = new OverlayItem(gpSeerly, locSeerley.getName(), this.getString(R.string.arrives) + time.getSeerley() + " minutes");
+		OverlayItem overlaySeerly = new OverlayItem(gpSeerly, locSeerley.getName(), "Arrives in " + locSeerley.getTime() + " minutes");
         overlaySeerly.setMarker(drawable2);
         itemizedoverlay.addOverlay(overlaySeerly);
         
@@ -181,14 +184,14 @@ public class UniMap extends MapActivity implements LocationListener {
 	private void sortDistances() {
 		BusStopMap busStopMap = new BusStopMap();
 
-		busStopMap.addStop(locRoth.getName(), locRoth.getDistance());
-		busStopMap.addStop(locOhio.getName(), locOhio.getDistance());
-		busStopMap.addStop(locSterling.getName(), locSterling.getDistance());
-		busStopMap.addStop(locHillcrest.getName(), locHillcrest.getDistance());
-		busStopMap.addStop(locCampuscts.getName(), locCampuscts.getDistance());
-		busStopMap.addStop(locHudson.getName(), locHudson.getDistance());
-		busStopMap.addStop(locCampus.getName(), locCampus.getDistance());
-		busStopMap.addStop(locSeerley.getName(), locSeerley.getDistance());
+		busStopMap.addStop(locRoth, locRoth.getDistance());
+		busStopMap.addStop(locOhio, locOhio.getDistance());
+		busStopMap.addStop(locSterling, locSterling.getDistance());
+		busStopMap.addStop(locHillcrest, locHillcrest.getDistance());
+		busStopMap.addStop(locCampuscts, locCampuscts.getDistance());
+		busStopMap.addStop(locHudson, locHudson.getDistance());
+		busStopMap.addStop(locCampus, locCampus.getDistance());
+		busStopMap.addStop(locSeerley, locSeerley.getDistance());
 
         Set s = busStopMap.getMap().entrySet();
 
@@ -199,10 +202,20 @@ public class UniMap extends MapActivity implements LocationListener {
         {
             Map.Entry m =(Map.Entry)i.next();
 
-            double key = (Double)m.getKey();
-            String value = (String)m.getValue();
+            double distance = (Double)m.getKey();
+            BusStop busstop = (BusStop)m.getValue();
 
-            System.out.println("Key :"+key+"  value :"+value);
+            TableLayout tl = (TableLayout)findViewById(R.id.tableMain);
+            TableRow row = new TableRow(this);
+            TextView name = new TextView(this);
+            name.setText(busstop.getName());
+            TextView time = new TextView(this);
+            time.setText(busstop.getTime() + " minutes");
+            time.setGravity(Gravity.CENTER_HORIZONTAL);
+            
+            tl.addView(row);
+            row.addView(name);
+            row.addView(time);
         }
 	}
 	
@@ -222,7 +235,7 @@ public class UniMap extends MapActivity implements LocationListener {
         TextView nextTwoTime = (TextView)findViewById(R.id.nextTwoTime);
         TextView nextThree = (TextView)findViewById(R.id.nextThree);
         TextView nextThreeTime = (TextView)findViewById(R.id.nextThreeTime);
-        
+        /**
         if ((minute >= 0 && minute < 4) || (minute >= 28 && minute < 34) || (minute >= 58)) {
         	//	ROTH Northeast Lot
         	stopOne = locRoth.getName();
@@ -295,6 +308,7 @@ public class UniMap extends MapActivity implements LocationListener {
         nextTwoTime.setText(minTwo + " minutes");
         nextThree.setText(stopThree);
         nextThreeTime.setText(minThree + " minutes");
+        */
 	}
 		
 	

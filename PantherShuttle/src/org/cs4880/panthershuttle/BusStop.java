@@ -5,14 +5,16 @@ import android.location.Location;
 public class BusStop {
 	
 	private String name = "";
+	private int time;
 	private double latitude;
 	private double longitude;
 	private double distance;
 	private Location location;
 	
-	public BusStop(String name, double latitude, double longitude, String provider)
+	public BusStop(String name, int time, double latitude, double longitude, String provider)
 	{
 		this.name = name;
+		this.time = time;
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.location = new Location(provider);
@@ -20,9 +22,14 @@ public class BusStop {
 		this.location.setLongitude(longitude);
 	}
 	
-	public void setName(String inputName)
+	public void setName(String name)
 	{
-		name = inputName;
+		this.name = name;
+	}
+	
+	public void setTime(int time)
+	{
+		this.time = time;
 	}
 	
 	public void setLatitude(double latitude)
@@ -53,6 +60,11 @@ public class BusStop {
 	public String getName()
 	{
 		return name;
+	}
+	
+	public int getTime()
+	{
+		return time;
 	}
 	
 	public double getDistance()

@@ -3,11 +3,8 @@
 
     <string name="hello">Hello World, PantherShuttleActivity!</string>
     <string name="app_name">Panther Shuttle</string>
-    <string name="map">View Map</string>
-    <string name="times">View Next Stops</string>
     <string name="schedule">Schedule</string>
     <string name="refresh">Refresh Map</string>
-    <string name="arrives">Arrives in</string>
     <string name="roth">ROTH Northeast Lot</string>
     <string name="ohio">27th and Ohio St. (CBB)</string>
     <string name="sterling">Sterling Apts</string>
