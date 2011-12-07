@@ -30,28 +30,28 @@ public class BusStopTimes {
         	seerley = 58 - minute;
         }
         
-        if (roth < 0) {
+        if (roth <= 0) {
         	roth += 30;
         }
-        if (ohio < 0) {
+        if (ohio <= 0) {
         	ohio += 30;
         }
-        if (sterling < 0) {
+        if (sterling <= 0) {
         	sterling += 30;
         }
-        if (hillcrest < 0) {
+        if (hillcrest <= 0) {
         	hillcrest += 30;
         }
-        if (campuscts < 0) {
+        if (campuscts <= 0) {
         	campuscts += 30;
         }
-        if (hudson < 0) {
+        if (hudson <= 0) {
         	hudson += 30;
         }
-        if (campus < 0) {
+        if (campus <= 0) {
         	campus += 30;
         }
-        if (seerley < 0) {
+        if (seerley <= 0) {
         	seerley += 30;
         }
     }
