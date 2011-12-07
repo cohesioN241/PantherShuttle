@@ -184,6 +184,7 @@ public class UniMap extends MapActivity implements LocationListener {
         // Using iterator in SortedMap 
         Iterator i = s.iterator();
 
+        int rank = 1;
         while(i.hasNext())
         {
             Map.Entry m =(Map.Entry)i.next();
@@ -193,7 +194,7 @@ public class UniMap extends MapActivity implements LocationListener {
             TableLayout tl = (TableLayout)findViewById(R.id.tableMain);
             TableRow row = new TableRow(this);
             TextView name = new TextView(this);
-            name.setText(busstop.getName());
+            name.setText(rank + ". " + busstop.getName());
             TextView time = new TextView(this);
             time.setText(busstop.getTime() + " minutes");
             time.setGravity(Gravity.RIGHT);
@@ -201,6 +202,8 @@ public class UniMap extends MapActivity implements LocationListener {
             tl.addView(row);
             row.addView(name);
             row.addView(time);
+            
+            rank++;
         }
 	}
 	
