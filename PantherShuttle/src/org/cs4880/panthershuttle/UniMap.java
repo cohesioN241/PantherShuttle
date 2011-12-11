@@ -141,6 +141,7 @@ public class UniMap extends MapActivity implements LocationListener {
 		//update our location
 		updateLocation(location);
 	}
+	
 	/** This method alerts the user that GPS is not running */
 	private void buildAlertMessageNoGps() {
 	    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
