@@ -65,7 +65,7 @@ public class UniMap extends MapActivity implements LocationListener {
 		
 		//check if the bus is currently running
 		Calendar now = Calendar.getInstance();
-        if ((now.get(Calendar.HOUR_OF_DAY) >= 7) && (now.get(Calendar.HOUR_OF_DAY) < 17)) {
+        if ((now.get(Calendar.HOUR_OF_DAY) >= 7) && (now.get(Calendar.HOUR_OF_DAY) < 17) && (now.get(Calendar.DAY_OF_WEEK) > 0) && (now.get(Calendar.DAY_OF_WEEK) < 6)) {
         	isRunning = true;
         }
         
@@ -332,7 +332,7 @@ public class UniMap extends MapActivity implements LocationListener {
         alertbox.setTitle("Notice");
         
         // set the message to display
-        alertbox.setMessage("The Panther Shuttle runs between the hours of 7 AM and 5 PM. Bus arrival times will not be displayed, but you still may view the bus stop locations and the Panther Shuttle schedule.");
+        alertbox.setMessage("The Panther Shuttle runs between the hours of 7 AM and 5 PM, Monday through Friday. Bus arrival times will not be displayed, but you may still view the bus stop locations and the Panther Shuttle schedule.");
 
         // add a neutral button to the alert box and assign a click listener
         alertbox.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
