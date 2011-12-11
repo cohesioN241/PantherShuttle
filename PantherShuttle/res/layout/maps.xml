@@ -15,10 +15,10 @@
 		/>
 <TableLayout  
     xmlns:android="http://schemas.android.com/apk/res/android"  
-    android:id="@+id/tableMain"  
+    android:id="@+id/tableHeader"  
     android:layout_below="@+id/mapview"
     android:layout_width="match_parent"  
-    android:layout_height="match_parent"  
+    android:layout_height="wrap_content"  
     android:shrinkColumns="*"  
     android:stretchColumns="*">  
     
@@ -69,6 +69,19 @@
             android:gravity="right" />  
     </TableRow>  
 </TableLayout>
+<ScrollView 
+    android:id="@+id/scrollMain"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/tableHeader">
+	<TableLayout  
+	    android:id="@+id/tableMain"
+	    android:layout_width="match_parent"  
+	    android:layout_height="match_parent"  
+	    android:shrinkColumns="*"  
+	    android:stretchColumns="*">  
+	</TableLayout>
+</ScrollView>
         
 
 </RelativeLayout>
