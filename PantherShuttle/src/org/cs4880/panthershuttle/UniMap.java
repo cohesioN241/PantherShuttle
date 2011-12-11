@@ -15,6 +15,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -68,13 +69,11 @@ public class UniMap extends MapActivity implements LocationListener {
         	isRunning = true;
         }
         
-        //add bus stops to map
-        getBusStops(isRunning);
-        
         if (isRunning) {	//is the bus running?
 	        //get the nearest bus stops
 	        getNearestStops();
         } else {	//notify user that bus is not currently running
+        	getOfflineStops();
         	notifyOffline();
         }
 	}
@@ -125,12 +124,12 @@ public class UniMap extends MapActivity implements LocationListener {
 	private void getMyLocation() {
 		//get the location based service
 		locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
+		
 		//use gps as our primary location provider
 		gpsProvider = locationManager.getProvider("gps").getName();
 		
 		//request location updates every 15 seconds and distance changed by 20 meters
-		locationManager.requestLocationUpdates(gpsProvider, 15000, 20, this);
+		locationManager.requestLocationUpdates(gpsProvider, 0, 0, this);
 		
 		//get our last known location
 		location = locationManager.getLastKnownLocation(gpsProvider);
@@ -140,7 +139,7 @@ public class UniMap extends MapActivity implements LocationListener {
 	}
 	
 	/** This method displays the bus stops on the map */
-	private void getBusStops(Boolean isRunning) {
+	private void getOfflineStops() {
 		for (int i=0; i<busstops.length; i++) {
 			Drawable locStop = null;
 			MyItemizedOverlay overlayStop = null;
@@ -150,16 +149,8 @@ public class UniMap extends MapActivity implements LocationListener {
 			}
 			GeoPoint gp = new GeoPoint((int)(busstops[i].getLatitude()*1E6), (int)(busstops[i].getLongitude()*1E6));
 			OverlayItem overlayitem = new OverlayItem(gp, busstops[i].getName(), bustime);
-			if ((!isRunning) || (busstops[i].getTime() <= 10)) {	//bus arrives in less than 10 minutes
-				locStop = this.getResources().getDrawable(R.drawable.pin2);	//red marker
-				overlayStop = new MyItemizedOverlay(locStop, this);
-			} else if (busstops[i].getTime() <= 20) {	//bus arrives in more than 10 minutes and less than 20 minutes
-				locStop = this.getResources().getDrawable(R.drawable.pin3);	//orange marker
-				overlayStop = new MyItemizedOverlay(locStop, this);
-			} else if (busstops[i].getTime() <= 30) {	//bus arrives in more than 20 minutes and less than 30 minutes
-				locStop = this.getResources().getDrawable(R.drawable.pin4);	//yellow marker
-				overlayStop = new MyItemizedOverlay(locStop, this);
-			}
+			locStop = this.getResources().getDrawable(R.drawable.pin2);	//red marker
+			overlayStop = new MyItemizedOverlay(locStop, this);
 			
 			//set the overlayitem marker
 			overlayitem.setMarker(locStop);
@@ -171,6 +162,62 @@ public class UniMap extends MapActivity implements LocationListener {
 	        mapOverlays.add(overlayStop);
 		}
 	}
+	
+	/** This method displays the bus stops on the map */
+	private void getBusStops(BusStop busstop, int stop) {
+		Drawable locStop = null;
+		MyItemizedOverlay overlayStop = null;
+		String bustime = "";
+		if (isRunning) {
+			bustime = "Arrives in " + busstop.getTime() + " minutes";
+		}
+		GeoPoint gp = new GeoPoint((int)(busstop.getLatitude()*1E6), (int)(busstop.getLongitude()*1E6));
+		OverlayItem overlayitem = new OverlayItem(gp, busstop.getName(), bustime);
+		switch (stop){
+			case 1:
+				locStop = this.getResources().getDrawable(R.drawable.pin2);	//red marker
+				overlayStop = new MyItemizedOverlay(locStop, this);
+				break;
+			case 2:
+				locStop = this.getResources().getDrawable(R.drawable.pin3);	//orange marker
+				overlayStop = new MyItemizedOverlay(locStop, this);
+				break;
+			case 3:
+				locStop = this.getResources().getDrawable(R.drawable.pin4);	//yellow marker
+				overlayStop = new MyItemizedOverlay(locStop, this);
+				break;
+			case 4:
+				locStop = this.getResources().getDrawable(R.drawable.pin5);	//teal marker
+				overlayStop = new MyItemizedOverlay(locStop, this);
+				break;
+			case 5:
+				locStop = this.getResources().getDrawable(R.drawable.pin6);	//light-blue marker
+				overlayStop = new MyItemizedOverlay(locStop, this);
+				break;
+			case 6:
+				locStop = this.getResources().getDrawable(R.drawable.pin7);	//blue marker
+				overlayStop = new MyItemizedOverlay(locStop, this);
+				break;
+			case 7:
+				locStop = this.getResources().getDrawable(R.drawable.pin8);	//purple marker
+				overlayStop = new MyItemizedOverlay(locStop, this);
+				break;
+			case 8:
+				locStop = this.getResources().getDrawable(R.drawable.pin9);	//magenta marker
+				overlayStop = new MyItemizedOverlay(locStop, this);
+				break;
+		}
+		
+		//set the overlayitem marker
+		overlayitem.setMarker(locStop);
+		
+		//add bus stop to overlay
+		overlayStop.addOverlay(overlayitem);
+
+        //add overlays to map
+        mapOverlays.add(overlayStop);
+	}
+	
 	
 	/** This method sets the distance to each bus stop */
 	private void getNearestStops() {
@@ -206,6 +253,7 @@ public class UniMap extends MapActivity implements LocationListener {
         Iterator i = s.iterator();
 
         int rank = 1;
+        int marker = 1;
         while(i.hasNext())
         {
             Map.Entry m =(Map.Entry)i.next();
@@ -222,22 +270,57 @@ public class UniMap extends MapActivity implements LocationListener {
             time.setText(busstop.getTime() + " minutes");
             time.setGravity(Gravity.RIGHT);
             
-            if (busstop.getTime() <= 10){
-            	name.setTextColor(Color.RED);
-            	time.setTextColor(Color.RED);
-            } else if (busstop.getTime() <= 20) {
-            	name.setTextColor(Color.argb(255,255,157,19));
-            	time.setTextColor(Color.argb(255,255,157,19));
-            } else if (busstop.getTime() <= 30) {
-            	name.setTextColor(Color.YELLOW);
-            	time.setTextColor(Color.YELLOW);
+            // add the bus stops to the map
+            switch (marker){
+            	case 1:
+            		getBusStops(busstop, marker);
+            		name.setTextColor(Color.argb(255,255,52,51));
+                	time.setTextColor(Color.argb(255,255,52,51));
+            		break;
+            	case 2:
+            		getBusStops(busstop, marker);
+            		name.setTextColor(Color.argb(255,255,158,21));
+                	time.setTextColor(Color.argb(255,255,158,21));
+            		break;
+            	case 3:
+            		getBusStops(busstop, marker);
+            		name.setTextColor(Color.argb(255,255,255,21));
+                	time.setTextColor(Color.argb(255,255,255,21));
+            		break;
+            	case 4:
+            		getBusStops(busstop, marker);
+            		name.setTextColor(Color.argb(255,51,224,225));
+                	time.setTextColor(Color.argb(255,51,224,225));
+            		break;
+            	case 5:
+            		getBusStops(busstop, marker);
+            		name.setTextColor(Color.argb(255,51,160,225));
+                	time.setTextColor(Color.argb(255,51,160,225));
+            		break;
+            	case 6:
+            		getBusStops(busstop, marker);
+            		name.setTextColor(Color.argb(255,51,58,225));
+                	time.setTextColor(Color.argb(255,51,58,225));
+            		break;
+            	case 7:
+            		getBusStops(busstop, marker);
+            		name.setTextColor(Color.argb(255,165,51,225));
+                	time.setTextColor(Color.argb(255,165,51,225));
+            		break;
+            	case 8:
+            		getBusStops(busstop, marker);
+            		name.setTextColor(Color.argb(255,225,51,171));
+                	time.setTextColor(Color.argb(255,225,51,171));
+            		break;
             }
             
+            // add the bus stops to the view
             tl.addView(row);
             row.addView(name);
             row.addView(time);
             
             rank++;
+            marker++;
         }
 	}
 	
@@ -270,7 +353,7 @@ public class UniMap extends MapActivity implements LocationListener {
 		@Override
 		protected void onResume() {
 			super.onResume();
-			locationManager.requestLocationUpdates(gpsProvider, 15000, 20, this);
+			locationManager.requestLocationUpdates(gpsProvider, 0, 0, this);
 		}
 
 		/** Stop the updates when Activity is paused */
@@ -309,8 +392,12 @@ public class UniMap extends MapActivity implements LocationListener {
 			}
 			else
 			{ 
-				lat = 0;
-				lng = 0;
+				//default location to center of campus
+				lat = 42.515085;
+				lng = -92.461388;
+				location = new Location(gpsProvider);
+				location.setLatitude(lat);
+				location.setLongitude(lng);
 				Toast.makeText(getApplicationContext(), "Error updating location", Toast.LENGTH_LONG).show();
 			}
 			
