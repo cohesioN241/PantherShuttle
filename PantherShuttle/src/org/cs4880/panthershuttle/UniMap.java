@@ -125,6 +125,10 @@ public class UniMap extends MapActivity implements LocationListener {
 		//get the location based service
 		locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 		
+		if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+	        buildAlertMessageNoGps();
+	    }
+		
 		//use gps as our primary location provider
 		gpsProvider = locationManager.getProvider("gps").getName();
 		
@@ -136,6 +140,24 @@ public class UniMap extends MapActivity implements LocationListener {
 		
 		//update our location
 		updateLocation(location);
+	}
+	/** This method alerts the user that GPS is not running */
+	private void buildAlertMessageNoGps() {
+	    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	    builder.setMessage("Yout GPS seems to be disabled, do you want to enable it?")
+	           .setCancelable(false)
+	           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	               public void onClick(final DialogInterface dialog, final int id) {
+	                   startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));; 
+	               }
+	           })
+	           .setNegativeButton("No", new DialogInterface.OnClickListener() {
+	               public void onClick(final DialogInterface dialog, final int id) {
+	                    dialog.cancel();
+	               }
+	           });
+	    final AlertDialog alert = builder.create();
+	    alert.show();
 	}
 	
 	/** This method displays the bus stops on the map */
