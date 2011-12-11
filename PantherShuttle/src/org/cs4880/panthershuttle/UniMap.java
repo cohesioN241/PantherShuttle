@@ -133,7 +133,7 @@ public class UniMap extends MapActivity implements LocationListener {
 		gpsProvider = locationManager.getProvider("gps").getName();
 		
 		//request location updates every 15 seconds and distance changed by 20 meters
-		locationManager.requestLocationUpdates(gpsProvider, 0, 0, this);
+		locationManager.requestLocationUpdates(gpsProvider, 15000, 20, this);
 		
 		//get our last known location
 		location = locationManager.getLastKnownLocation(gpsProvider);
@@ -376,7 +376,7 @@ public class UniMap extends MapActivity implements LocationListener {
 		@Override
 		protected void onResume() {
 			super.onResume();
-			locationManager.requestLocationUpdates(gpsProvider, 0, 0, this);
+			locationManager.requestLocationUpdates(gpsProvider, 15000, 20, this);
 		}
 
 		/** Stop the updates when Activity is paused */
