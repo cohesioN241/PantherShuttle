@@ -49,10 +49,15 @@ public class UniMap extends MapActivity implements LocationListener {
 	private BusStop locRoth, locOhio, locSterling, locHillcrest, locCampuscts, locHudson, locCampus, locSeerley;
 	private BusStop[] busstops;
 	private boolean isRunning = false;
+	private boolean notified = false;
 
-	public void onCreate(Bundle bundle) {
-		super.onCreate(bundle);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.maps); // bind the layout to the activity
+		
+		if (savedInstanceState != null) {
+			notified = savedInstanceState.getBoolean("Notified");
+		}
 		
 		//setup the map
 		setupMap();
@@ -77,7 +82,9 @@ public class UniMap extends MapActivity implements LocationListener {
 	        getNearestStops();
         } else {	//notify user that bus is not currently running
         	getOfflineStops();		// display bus stops
-        	notifyOffline();		// notify user that bus is not running
+        	if (!notified) {
+        		notifyOffline();		// notify user that bus is not running
+        	}
         }
 	}
 
@@ -371,6 +378,18 @@ public class UniMap extends MapActivity implements LocationListener {
 
         // show it
         alertbox.show();
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		savedInstanceState.putBoolean("Notified", true);
+		super.onSaveInstanceState(savedInstanceState);
+	}
+	
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		notified = savedInstanceState.getBoolean("Notified");
 	}
 		
 	
