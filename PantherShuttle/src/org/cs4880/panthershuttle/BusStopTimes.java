@@ -4,76 +4,50 @@ import java.util.Calendar;
 
 public class BusStopTimes {
 
-	private int roth, ohio, sterling, hillcrest, campuscts, hudson, campus, seerley;
+	private int[] stop = { 4, 10, 13, 19, 21, 23, 26, 28 };
 	
 	public BusStopTimes() {
 		Calendar now = Calendar.getInstance();
-        int minute = now.get(Calendar.MINUTE);
+		int hour = now.get(Calendar.HOUR_OF_DAY);	// hour of day
+        int minute = now.get(Calendar.MINUTE);		// minute of hour
         
-    	if (minute <= 28) {
-        	roth = 4 - minute;
-        	ohio = 10 - minute;
-        	sterling = 13 - minute;
-        	hillcrest = 19 - minute;
-        	campuscts = 21 - minute;
-        	hudson = 23 - minute;
-        	campus = 26 - minute;
-        	seerley = 28 - minute;
-        } else {
-        	roth = 34 - minute;
-        	ohio = 40 - minute;
-        	sterling = 43 - minute;
-        	hillcrest = 49 - minute;
-        	campuscts = 51 - minute;
-        	hudson = 53 - minute;
-        	campus = 56 - minute;
-        	seerley = 58 - minute;
-        }
-        
-        if (roth <= 0) {
-        	roth += 30;
-        }
-        if (ohio <= 0) {
-        	ohio += 30;
-        }
-        if (sterling <= 0) {
-        	sterling += 30;
-        }
-        if (hillcrest <= 0) {
-        	hillcrest += 30;
-        }
-        if (campuscts <= 0) {
-        	campuscts += 30;
-        }
-        if (hudson <= 0) {
-        	hudson += 30;
-        }
-        if (campus <= 0) {
-        	campus += 30;
-        }
-        if (seerley <= 0) {
-        	seerley += 30;
-        }
+		int offset = minute;
+		if (minute > 28) {	// second half of the hour
+			offset -= 30;
+		}
+		for (int i=0; i<stop.length; i++){
+			stop[i] -= offset;		// time til next bus arrives
+			
+			if (stop[i] <= 0) {			// bus has already passed
+				if ((hour == 16) && (minute >= 30)) {	// time is past 4:30 PM, don't want the user waiting for the next bus
+					stop[i] = 0;
+				} else {				// next time bus will arrive
+					stop[i] += 30;
+				}
+			} else if ((hour == 6) && (minute >= 30)) {	// check the schedule after 6:30 AM
+				stop[i] += 30;
+			}
+		}
     }
 	
     public int getTime(String busstop){
     	int time = 0;
     	if (busstop.equals("roth")){
-    		time = roth;
+    		time = stop[0];
     	} else if (busstop.equals("ohio")){
-    		time = ohio;
+    		time = stop[1];
     	} else if (busstop.equals("sterling")){
-    		time = sterling;
+    		time = stop[2];
     	} else if (busstop.equals("hillcrest")){
-    		time = hillcrest;
+    		time = stop[3];
     	} else if (busstop.equals("campuscts")){
-    		time = campuscts;
+    		time = stop[4];
     	} else if (busstop.equals("hudson")){
-    		time = hudson;
+    		time = stop[5];
     	} else if (busstop.equals("campus")){
-    		time = campus;
+    		time = stop[6];
     	} else if (busstop.equals("seerley")){
-    		time = seerley;
+    		time = stop[7];
     	}
     	return time;
     }

@@ -65,7 +65,10 @@ public class UniMap extends MapActivity implements LocationListener {
 		
 		//check if the bus is currently running
 		Calendar now = Calendar.getInstance();
-        if ((now.get(Calendar.HOUR_OF_DAY) >= 7) && (now.get(Calendar.HOUR_OF_DAY) < 17) && (now.get(Calendar.DAY_OF_WEEK) > 0) && (now.get(Calendar.DAY_OF_WEEK) < 6)) {
+		int hour = now.get(Calendar.HOUR_OF_DAY);	// hour of the day (0-24)
+		int minute = now.get(Calendar.MINUTE);		// minute of the hour
+		int day = now.get(Calendar.DAY_OF_WEEK);	// day of the week (0-6)
+        if (((hour >= 6) && (minute >= 30)) && (hour < 17) && (day > 0) && (day < 6)) {
         	isRunning = true;
         }
         
@@ -73,8 +76,8 @@ public class UniMap extends MapActivity implements LocationListener {
 	        //get the nearest bus stops
 	        getNearestStops();
         } else {	//notify user that bus is not currently running
-        	getOfflineStops();
-        	notifyOffline();
+        	getOfflineStops();		// display bus stops
+        	notifyOffline();		// notify user that bus is not running
         }
 	}
 
